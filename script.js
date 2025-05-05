@@ -11,6 +11,29 @@ async function caricaArticoli() {
     const [codice, descrizione, tipo_articolo] = row.split(';');
     return { codice, descrizione, tipo_articolo };
   });
+  popolaSuggerimenti();
+}
+
+function popolaSuggerimenti() {
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', function() {
+    const valore = this.value.toLowerCase();
+    const suggeriti = articoli.filter(a => a.codice.includes(valore) || a.descrizione.toLowerCase().includes(valore));
+    const container = document.getElementById('listaSuggerimenti');
+    container.innerHTML = '';
+    suggeriti.slice(0, 5).forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'suggerimento';
+      div.textContent = item.codice + ' - ' + item.descrizione;
+      div.onclick = () => {
+        document.getElementById('codiceArticolo').value = item.codice;
+        document.getElementById('descrizione').value = item.descrizione;
+        document.getElementById('peso').value = '';
+        container.innerHTML = '';
+      };
+      container.appendChild(div);
+    });
+  });
 }
 
 function aggiornaPreferiti() {
@@ -81,26 +104,31 @@ function generaEtichetta() {
     barcode = codice + '000000' + (peso * 100).toFixed(0).padStart(3, '0');
   }
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#0D5164';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'white';
-  ctx.textAlign = 'center';
-  ctx.font = '16px Arial';
-  ctx.fillText(`Codice: ${codice}`, canvas.width / 2, 40);
-  ctx.fillText(`Descrizione: ${descrizione}`, canvas.width / 2, 70);
-  ctx.fillText(`Peso: ${peso} kg`, canvas.width / 2, 100);
-  JsBarcode(canvas, barcode, { format: tipo === 'a_peso' ? 'EAN13' : 'CODE128', displayValue: false });
+  const logo = new Image();
+  logo.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAoCAIAAAC6iKlyAAAAeElEQVR4nO3QQRHAIADAMOA/cXjAv4apWHksUdDrfPYZfG/dDvgLoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTkBciaARIKlRaSAAAAAElFTkSuQmCC";
+  logo.onload = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(logo, (canvas.width - 120) / 2, 10, 120, 40);
 
-  setTimeout(() => {
-    const dataUrl = canvas.toDataURL('image/jpeg');
-    const link = document.createElement('a');
-    link.href = dataUrl;
-    link.download = `${codice}.pdf`;
-    const pdf = new jspdf.jsPDF({ orientation: "portrait", unit: "mm", format: [100, 100] });
-    pdf.addImage(dataUrl, 'JPEG', 0, 0, 100, 100);
-    pdf.save(`${codice}.pdf`);
-  }, 300);
+    ctx.fillStyle = '#000';
+    ctx.textAlign = 'center';
+    ctx.font = '14px Arial';
+    ctx.fillText(descrizione, canvas.width / 2, 70);
+    ctx.fillText('Codice: ' + codice, canvas.width / 2, 90);
+    ctx.fillText('Peso: ' + peso + ' kg', canvas.width / 2, 110);
+
+    JsBarcode(canvas, barcode, {
+      format: tipo === 'a_peso' ? 'EAN13' : 'CODE128',
+      displayValue: true,
+      fontSize: 16,
+      textMargin: 5,
+      width: 2,
+      height: 60,
+      margin: 20
+    });
+  };
 }
 
 caricaArticoli();
