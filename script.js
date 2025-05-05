@@ -1,5 +1,5 @@
 
-const csvUrl = "https://raw.githubusercontent.com/palettap/barcode-label-maker/e2afbcfe438081c9c6bbf490654e2158654ba5b9/articoli_esempio.csv";
+const csvUrl = "https://github.com/palettap/etichette/blob/4ee1d1ff7c1e680bcc026b7315a71809ff2ba6bb/articoli.csv";
 let articoli = [];
 const preferiti = JSON.parse(localStorage.getItem('preferiti')) || [];
 
