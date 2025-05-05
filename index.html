@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Naputeca.Pro - Generatore Etichette</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<header>
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAoCAIAAAC6iKlyAAAAeElEQVR4nO3QQRHAIADAMOA/cXjAv4apWHksUdDrfPYZfG/dDvgLoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTE6IjREaMjRkeMjhgdMTpidMToiNERoyNGR4yOGB0xOmJ0xOiI0RGjI0ZHjI4YHTE6YnTkBciaARIKlRaSAAAAAElFTkSuQmCC" alt="Naputeca.Pro Logo" width="120">
+  <h1>Generatore Etichette</h1>
+</header>
+
+<div class="section">
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Cerca articolo..." id="searchInput" />
+  </div>
+  <div id="listaSuggerimenti"></div>
+</div>
+
+<div class="section">
+  <h2>Articoli Preferiti</h2>
+  <div id="preferiti" class="favorites-menu"></div>
+</div>
+
+<div class="section">
+  <h2>Dati Etichetta</h2>
+  <div class="input-container">
+    <input type="text" id="codiceArticolo" placeholder="Codice Articolo (4 cifre)" maxlength="4" />
+    <input type="text" id="descrizione" placeholder="Descrizione" />
+    <input type="number" id="pesoIntero" placeholder="Peso - Parte intera (es. 1)" />
+    <input type="number" id="pesoDecimale" placeholder="Peso - Decimali (es. 25)" />
+    <input type="number" id="quantita" placeholder="Quantità (solo per articoli standard)" />
+  </div>
+  <button onclick="generaEtichetta()"><i class="fas fa-barcode"></i> Genera Etichetta</button>
+  <button onclick="aggiungiPreferito()"><i class="fas fa-star"></i> Aggiungi ai preferiti</button>
+</div>
+
+<canvas id="canvasEtichetta" width="300" height="300"></canvas>
+<script src="script.js"></script>
+</body>
+</html>

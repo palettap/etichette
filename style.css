@@ -1,0 +1,103 @@
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  padding: 20px;
+  color: #0D5164;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1, h2 {
+  font-size: 22px;
+  color: #FAB900;
+}
+
+.input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input, select, button {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  flex: 1 1 200px;
+}
+
+button {
+  background-color: #0D5164;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+}
+
+button:hover {
+  background-color: #093c4a;
+}
+
+canvas {
+  display: block;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.section {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar i {
+  margin-right: 8px;
+  color: #ccc;
+}
+
+.favorites-menu {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  border-top: 1px solid #ccc;
+}
+
+.favorite-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.favorite-item i {
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+#listaSuggerimenti .suggerimento {
+  padding: 5px;
+  border: 1px solid #ddd;
+  margin: 2px 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+#listaSuggerimenti .suggerimento:hover {
+  background-color: #f0f0f0;
+}
