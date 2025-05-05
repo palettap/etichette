@@ -1,7 +1,7 @@
 
 const csvUrl = "https://raw.githubusercontent.com/palettap/barcode-label-maker/e2afbcfe438081c9c6bbf490654e2158654ba5b9/articoli_esempio.csv";
 let articoli = [];
-const preferiti = JSON.parse(localStorage.getItem('preferiti')) || [];
+const preferiti = JSON.parse(localStorage.getItem('preferiti') || '[]');
 
 async function caricaArticoli() {
   const res = await fetch(csvUrl);
@@ -19,9 +19,12 @@ function aggiornaPreferiti() {
   preferiti.forEach((item, index) => {
     const div = document.createElement('div');
     div.className = 'favorite-item';
-    div.innerHTML = `<span>{item.codice} - {item.descrizione}</span>
-      <span><i class="fas fa-tag" onclick='caricaPreferito({index})'></i>
-      <i class="fas fa-trash" onclick='rimuoviPreferito({index})'></i></span>`;
+    div.innerHTML = `
+      <span>${item.codice} - ${item.descrizione}</span>
+      <span>
+        <i class="fas fa-tag" onclick='caricaPreferito(${index})'></i>
+        <i class="fas fa-trash" onclick='rimuoviPreferito(${index})'></i>
+      </span>`;
     container.appendChild(div);
   });
 }
@@ -30,9 +33,11 @@ function aggiungiPreferito() {
   const codice = document.getElementById('codiceArticolo').value;
   const descrizione = document.getElementById('descrizione').value;
   const peso = document.getElementById('peso').value;
-  preferiti.push({ codice, descrizione, peso });
-  localStorage.setItem('preferiti', JSON.stringify(preferiti));
-  aggiornaPreferiti();
+  if (codice && descrizione) {
+    preferiti.push({ codice, descrizione, peso });
+    localStorage.setItem('preferiti', JSON.stringify(preferiti));
+    aggiornaPreferiti();
+  }
 }
 
 function caricaPreferito(index) {
@@ -82,16 +87,19 @@ function generaEtichetta() {
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
   ctx.font = '16px Arial';
-  ctx.fillText(`Codice: {codice}`, canvas.width / 2, 40);
-  ctx.fillText(`Descrizione: {descrizione}`, canvas.width / 2, 70);
-  ctx.fillText(`Peso: {peso} kg`, canvas.width / 2, 100);
+  ctx.fillText(`Codice: ${codice}`, canvas.width / 2, 40);
+  ctx.fillText(`Descrizione: ${descrizione}`, canvas.width / 2, 70);
+  ctx.fillText(`Peso: ${peso} kg`, canvas.width / 2, 100);
   JsBarcode(canvas, barcode, { format: tipo === 'a_peso' ? 'EAN13' : 'CODE128', displayValue: false });
 
   setTimeout(() => {
-    const dataUrl = canvas.toDataURL();
-    const win = window.open();
-    win.document.write('<img src="' + dataUrl + '" onload="window.print(); window.close();">');
-    win.document.close();
+    const dataUrl = canvas.toDataURL('image/jpeg');
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = `${codice}.pdf`;
+    const pdf = new jspdf.jsPDF({ orientation: "portrait", unit: "mm", format: [100, 100] });
+    pdf.addImage(dataUrl, 'JPEG', 0, 0, 100, 100);
+    pdf.save(`${codice}.pdf`);
   }, 300);
 }
 
